@@ -349,6 +349,7 @@ public class UserInterface implements Serializable {
                                     String staffTitle = scan();
                                     System.out.println("ENTER NEW STAFF'S SALARY: ");
                                     Double staffSalary = Double.parseDouble(scan());
+
                                     hotelplaza.changeStaffInfo(staffPhonenumber, staffFirstname, staffLastname, staffTitle, staffSalary);
 
 
@@ -362,18 +363,85 @@ public class UserInterface implements Serializable {
                                     System.out.println("2. CLEANINGLADY");
                                     System.out.println("3. DIRECTOR");
                                     System.out.println("4. RECEPTIONIST");
-                                    System.out.println("ENTER STAFF'S FULL NAME: ");
-                                    String staffFullname = scan();
-                                    System.out.println("ENTER STAFF'S PHONENUMBER: ");
-                                    int staffPhonenumber2 = Integer.parseInt(scan());
-                                    System.out.println("ENTER STAFF'S TITLE: ");
-                                    String staffTitle2 = scan();
-                                    System.out.println("ENTER STAFF'S SALARY: ");
-                                    Double staffSalary2 = Double.parseDouble(scan());
+                                    System.out.println("5. EXIT");
+                                    String staffType = scan();
+                                    switch (staffType) {
+                                        case "1":
+                                            System.out.println("ENTER NEW ACCOUNTANT'S TITLE: ");
+                                            String staffTitle1 = scan();
+                                            System.out.println("ENTER NEW ACCOUNTANT'S FIRST NAME: ");
+                                            String staffFirstname1 = scan();
+                                            System.out.println("ENTER NEW ACCOUNTANT'S LAST NAME: ");
+                                            String staffLastname1 = scan();
+                                            System.out.println("ENTER NEW ACCOUNTANT'S PHONENUMBER: ");
+                                            int staffPhonenumber1 = Integer.parseInt(scan());
+                                            System.out.println("ENTER NEW ACCOUNTANT'S SALARY: ");
+                                            Double staffSalary1 = Double.parseDouble(scan());
+                                            hotelplaza.registerNewAccountant( staffTitle1, staffFirstname1, staffLastname1, staffPhonenumber1, staffSalary1);
+                                            hotelplaza.getListOfStaff().forEach(System.out::println);
+                                            System.out.println("\n----------------- NEW ACCOUNTANT REGISTERED SUCCESSFULLY -----------------");
+                                            break;
+                                        case "2":
+                                            System.out.println("ENTER NEW CLEANINGLADY'S TITLE: ");
+                                            String staffTitle2 = scan();
+                                            System.out.println("ENTER NEW CLEANINGLADY'S FIRST NAME: ");
+                                            String staffFirstname2 = scan();
+                                            System.out.println("ENTER NEW CLEANINGLADY'S LAST NAME: ");
+                                            String staffLastname2 = scan();
+                                            System.out.println("ENTER NEW CLEANINGLADY'S PHONENUMBER: ");
+                                            int staffPhonenumber2 = Integer.parseInt(scan());
+                                            System.out.println("ENTER NEW CLEANINGLADY'S SALARY: ");
+                                            Double staffSalary2 = Double.parseDouble(scan());
+                                            hotelplaza.registerCleaningLady( staffTitle2, staffFirstname2, staffLastname2, staffPhonenumber2, staffSalary2);
+                                            hotelplaza.getListOfStaff().forEach(System.out::println);
+                                            System.out.println("\n----------------- NEW CLEANINGLADY REGISTERED SUCCESSFULLY -----------------");
+                                            break;
+                                        case "3":
+                                            System.out.println("ENTER NEW DIRECTOR'S TITLE: ");
+                                            String staffTitle3 = scan();
+                                            System.out.println("ENTER NEW DIRECTOR'S FIRST NAME: ");
+                                            String staffFirstname3 = scan();
+                                            System.out.println("ENTER NEW DIRECTOR'S LAST NAME: ");
+                                            String staffLastname3 = scan();
+                                            System.out.println("ENTER NEW DIRECTOR'S PHONENUMBER: ");
+                                            int staffPhonenumber3 = Integer.parseInt(scan());
+                                            System.out.println("ENTER NEW DIRECTOR'S SALARY: ");
+                                            Double staffSalary3 = Double.parseDouble(scan());
+                                            System.out.println("ENTER USERNAME FOR NEW DIRECTOR: ");
+                                            String staffUsername3 = scan();
+                                            System.out.println("ENTER PASSWORD FOR NEW DIRECTOR: ");
+                                            String staffPassword3 = scan();
+                                            hotelplaza.registerNewDirector( staffTitle3, staffFirstname3, staffLastname3, staffPhonenumber3, staffSalary3, staffUsername3, staffPassword3);
+                                            hotelplaza.getListOfStaff().forEach(System.out::println);
+                                            System.out.println("\n----------------- NEW DIRECTOR REGISTERED SUCCESSFULLY -----------------");
+                                            break;
+                                        case "4":
+                                            System.out.println("ENTER NEW RECEPTIONIST'S TITLE: ");
+                                            String staffTitle4 = scan();
+                                            System.out.println("ENTER NEW RECEPTIONIST'S FIRST NAME: ");
+                                            String staffFirstname4 = scan();
+                                            System.out.println("ENTER NEW RECEPTIONIST'S LAST NAME: ");
+                                            String staffLastname4 = scan();
+                                            System.out.println("ENTER NEW RECEPTIONIST'S PHONENUMBER: ");
+                                            int staffPhonenumber4 = Integer.parseInt(scan());
+                                            System.out.println("ENTER NEW RECEPTIONIST'S SALARY: ");
+                                            Double staffSalary4 = Double.parseDouble(scan());
+                                            System.out.println("ENTER USERNAME FOR NEW RECEPTIONIST: ");
+                                            String staffUsername4 = scan();
+                                            System.out.println("ENTER PASSWORD FOR NEW RECEPTIONIST: ");
+                                            String staffPassword4 = scan();
+                                            hotelplaza.registerNewReception( staffTitle4, staffFirstname4, staffLastname4, staffPhonenumber4, staffSalary4, staffUsername4, staffPassword4);
+                                            hotelplaza.getListOfStaff().forEach(System.out::println);
+                                            System.out.println("\n----------------- NEW RECEPTIONIST REGISTERED SUCCESSFULLY -----------------");
 
 
 
 
+                                            break;
+                                        case "5":
+                                            //going back to main menu
+                                            break;
+                                    }
                                     // code block
                                     break;
                                 case "7":     // LOG OUT

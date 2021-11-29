@@ -94,6 +94,9 @@ public class Hotel implements Serializable {
         listOfRegisteredGuests.add(registeredGuest);
         return registeredGuest;
     }
+
+
+
     //price for booking each time
     public double totalPriceBooking( int numberOfNights, int roomNumber,String internetAccess) {
         for (int i = 0; i < listOfRooms.size(); i++) {
