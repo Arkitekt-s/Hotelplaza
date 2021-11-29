@@ -98,16 +98,46 @@ public class UserInterface implements Serializable {
                             switch (scan()) {
                                 case "1":
                                     // make a booking
-
                                     System.out.println("\n----------------- MAKE A BOOKING -----------------\n");
+                                    System.out.print("ENTER CHECK-IN DATE (dd/MM/yyyy): ");
 
+                                    //apply the courent date format
+                                    TimeZone zone = TimeZone.getTimeZone("UTC");
+                                    Calendar cal =  Calendar.getInstance(zone);
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.GERMAN);
+                                    System.out.println("current date: " + dateFormat.format(cal.getTime()));
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    LocalDate checkIn = LocalDate.parse(scan(), formatter);
 
+                                    //does not allow the user to make a booking before the current date
+                                    if (checkIn.isBefore(LocalDate.now())) {
+                                        System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
+                                        break;
+                                    }
+
+                                    //checkout date
+                                    System.out.print("ENTER CHECK-OUT DATE (dd/MM/yyyy): ");
+                                    //apply the courent date format
+                                    cal.clear(Calendar.YEAR);
+
+                                    LocalDate checkOut = LocalDate.parse(scan(), formatter);
+                                    //does not allow the user to make a booking before the check in date
+
+                                    if (checkOut.isBefore(checkIn)) {
+                                        System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
+                                        break;
+
+                                    }
+
+                                    //cheack if the room is available for this time period
+                                    System.out.println("\n----------------- ROOMS AVAILABLE BETWEEN THIS TIME-----------------\n");
+                                    hotelplaza.checkAvailableDays(checkIn, checkOut);
 
                                     //cheack if the room is available
                                     System.out.print("SHOW ROOMS TYPE: "+"\n");
                                     //show listofrooms isOccupied = false
                                     hotelplaza.showListOfRooms();
-                                    System.out.print("DO YOU LIKE TO SEE ALL DETAILS OF THE AVAILABLE ROOMS? (Y/N): ");
+                                    System.out.print("DO YOU LIKE TO SEE ALL DETAILS OF All ROOMS? (Y/N): ");
                                     String answer = scan();
                                     if(answer.equalsIgnoreCase("Y")){
                                         hotelplaza.getListOfRooms().forEach(System.out::println);
@@ -146,38 +176,8 @@ public class UserInterface implements Serializable {
                                     }
 
 
-                                    System.out.print("ENTER CHECK-IN DATE (dd/MM/yyyy): ");
 
 
-                                    //apply the courent date format
-
-                                    TimeZone zone = TimeZone.getTimeZone("UTC");
-                                    Calendar cal =  Calendar.getInstance(zone);
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.GERMAN);
-                                    System.out.println("current date: " + dateFormat.format(cal.getTime()));
-
-                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                                    LocalDate checkIn = LocalDate.parse(scan(), formatter);
-
-                                    //does not allow the user to make a booking before the current date
-                                    if (checkIn.isBefore(LocalDate.now())) {
-                                        System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
-                                        break;
-                                    }
-
-
-                                    System.out.print("ENTER CHECK-OUT DATE (dd/MM/yyyy): ");
-                                    //apply the courent date format
-                                    cal.clear(Calendar.YEAR);
-
-                                    LocalDate checkOut = LocalDate.parse(scan(), formatter);
-                                    //does not allow the user to make a booking before the check in date
-
-                                    if (checkOut.isBefore(checkIn)) {
-                                        System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
-                                        break;
-
-                                    }
 
                                     //calculate the number of nights in check-in and check-out
                                     int numberOfNights = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
@@ -195,17 +195,24 @@ public class UserInterface implements Serializable {
                                     System.out.println("\n----------------- GUEST REGISTERED SUCCESSFULLY -----------------");
                                     System.out.println("\n----------------- LIST OF GUEST -----------------");
                                     //hotelplaza.getListOfRegisteredGuests().forEach(System.out::println);
-                                    hotelplaza.makeBooking( roomType, numberOfRooms, numberOfNights,checkIn,checkOut, hotelplaza.registerGuest(guestFullname, guestAddress, guestPhonenumber));
+                                    hotelplaza.makeBooking( roomType, numberOfRooms, numberOfNights,checkIn,checkOut,
+                                            hotelplaza.registerGuest(guestFullname, guestAddress, guestPhonenumber));
+
                                     List<Booking> bookings = hotelplaza.getListOfBookings();
 
                                     for(int i = 0; i < bookings.size(); i++) {
                                         System.out.println(bookings.get(i));
                                     }
+
                                     System.out.println("\n----------------- BOOKING MADE SUCCESSFULLY -----------------");
 
                                     System.out.println("\n----------------- PRINTING BILL -----------------");
                                     double price = hotelplaza.totalPriceBooking(numberOfNights,numberOfRooms,internet);
+                                    //print bill in pdf as pdf file
                                     System.out.println("\n----------------- TOTAL PRICE: "+price+"DKK -----------------");
+                                    hotelplaza.printBill(price,numberOfNights,numberOfRooms,internet,checkIn,
+                                            checkOut,guestFullname,guestAddress,guestPhonenumber);
+
                                     System.out.println("\n----------------- BILL PRINTED SUCCESSFULLY -----------------");
 
 
@@ -219,7 +226,10 @@ public class UserInterface implements Serializable {
                                     //available rooms in the hotel
                                     System.out.println("\n----------------- AVAILABLE ROOMS -----------------");
                                     //update list of rooms
-                                    hotelplaza.updateListOfRooms(numberOfRooms);
+                                    hotelplaza.updateListOfRooms(numberOfRooms,checkIn,checkOut);
+                                    //print chekavailable days
+
+
 
                                     //show only isocupide  false rooms
                                     //print only list of rooms name and number
@@ -241,6 +251,7 @@ public class UserInterface implements Serializable {
                                         System.out.println("\n----------------- GOODBYE -----------------");
 
                                     }
+                                    //Main.serialize( hotelplaza,"Database.ser");
 
                                     break;
 
@@ -295,9 +306,9 @@ public class UserInterface implements Serializable {
 
                                     //print information about booking
                                     System.out.println("\n----------------- BOOKING UPDATED SUCCESSFULLY -----------------");
+                                    //Main.serialize( hotelplaza,"Database.ser");
 
                                     break;
-
 
                                     // code block
 
@@ -312,8 +323,10 @@ public class UserInterface implements Serializable {
                                     String guestAddress2 = scan();
                                     //print updated guest info
                                     hotelplaza.changeGuestInfo(guestPhonenumber2, guestFullname2, guestAddress2);
+
                                     //print guest info
                                     System.out.println("\n----------------- GUEST INFO UPDATED SUCCESSFULLY -----------------");
+                                    //Main.serialize( hotelplaza,"Database.ser");
 
                                     // code block
                                     break;
@@ -330,6 +343,7 @@ public class UserInterface implements Serializable {
                                     System.out.println("\n----------------- ROOM PRICE CHANGED SUCCESSFULLY -----------------");
                                     System.out.println("\n-----------------DETAILS OF ALL ROOMS:-----------------");
                                     hotelplaza.showListOfRooms2();
+                                    //Main.serialize( hotelplaza,"Database.ser");
 
 
 
@@ -351,6 +365,7 @@ public class UserInterface implements Serializable {
                                     Double staffSalary = Double.parseDouble(scan());
 
                                     hotelplaza.changeStaffInfo(staffPhonenumber, staffFirstname, staffLastname, staffTitle, staffSalary);
+                                    //Main.serialize( hotelplaza,"Database.ser");
 
 
 
@@ -379,7 +394,7 @@ public class UserInterface implements Serializable {
                                             Double staffSalary1 = Double.parseDouble(scan());
                                             hotelplaza.registerNewAccountant( staffTitle1, staffFirstname1, staffLastname1, staffPhonenumber1, staffSalary1);
                                             hotelplaza.getListOfStaff().forEach(System.out::println);
-                                            System.out.println("\n----------------- NEW ACCOUNTANT REGISTERED SUCCESSFULLY -----------------");
+                                            //System.out.println("\n----------------- NEW ACCOUNTANT REGISTERED SUCCESSFULLY -----------------");
                                             break;
                                         case "2":
                                             System.out.println("ENTER NEW CLEANINGLADY'S TITLE: ");
@@ -437,11 +452,13 @@ public class UserInterface implements Serializable {
 
 
 
+
                                             break;
                                         case "5":
                                             //going back to main menu
                                             break;
                                     }
+                                    //Main.serialize( hotelplaza,"Database.ser");
                                     // code block
                                     break;
                                 case "7":     // LOG OUT
