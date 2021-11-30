@@ -125,22 +125,26 @@ public class Hotel implements Serializable {
   }
 
   // Determine how many guests in the hotel
-  public void numberOfGuests() {}
+  public int numberOfGuests() {
+    return listOfRegisteredGuests.size();
+  }
 
   // the update booking here
   public void updateBooking() {}
-  // CHANGE GUEST INFORMATION
-  public Hotel changeGuestInfo(int phoneNumber, String fullName, String address) {
+  // CHANGE GUEST INFORMATION and show the updated information
+
+  public void changeGuestInfo(int phoneNumber, String fullName, String address) {
     for (int i = 0; i < listOfRegisteredGuests.size(); i++) {
       if (listOfRegisteredGuests.get(i).getPhoneNumber() == phoneNumber) {
         listOfRegisteredGuests.get(i).setFullName(fullName);
         listOfRegisteredGuests.get(i).setAddress(address);
+        System.out.println(listOfRegisteredGuests.get(i).toString());
       }
-      System.out.println("Guest information has been updated");
-      System.out.println(listOfRegisteredGuests.get(i));
+
+      }
+
     }
-    return null;
-  }
+
 
   // CHANGE STAFF INFO
   public Hotel changeStaffInfo(
@@ -213,7 +217,6 @@ public class Hotel implements Serializable {
   }
 
 
-  // room isoccupied false depend to bookings check in and check out
 
 
 
@@ -302,7 +305,7 @@ public class Hotel implements Serializable {
       if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
         listOfBookings.get(i).setEndDate(newCheckoutDate);
         System.out.println("Booking has been changed");
-        System.out.println("Booking has been changed");
+
       }
     }
     return null;
@@ -332,27 +335,34 @@ public class Hotel implements Serializable {
     System.out.println("Total price: " + (price));
   }
   //isocupide according to check in and check out
-  public Hotel OccupiedRoom(LocalDate checkIn, LocalDate checkOut) {
+
+
+  // check if room is available
+
+
+  // check if room is available
+  public boolean OccupiedRoom(LocalDate checkIn, LocalDate checkOut) {
     for (int i = 0; i < listOfBookings.size(); i++) {
       if (listOfBookings.get(i).getStartDate().isAfter(checkIn)
           && listOfBookings.get(i).getEndDate().isBefore(checkOut)) {
-        listOfRooms.get(i).setIsOccupied(true);
-
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
 
 
 
-  // room can book in available days FOR EACH ROOM
+  // check available days in each rooms
+
+
 
 
 
   public Hotel checkAvailableDays(LocalDate checkIn, LocalDate checkOut) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (OccupiedRoom(checkIn, checkOut)== null) {
+      if (OccupiedRoom(checkIn, checkOut)== false) {
         System.out.println(
             "Room number "
                 + listOfBookings.get(i).getRoomNumber()

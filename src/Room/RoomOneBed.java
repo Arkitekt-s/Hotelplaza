@@ -1,5 +1,7 @@
 package Room;
 
+import java.time.LocalDate;
+
 public class RoomOneBed extends Room {
     private boolean hasBalcony;
     private boolean hasTV;
