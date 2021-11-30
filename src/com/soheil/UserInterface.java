@@ -145,17 +145,18 @@ public class UserInterface implements Serializable {
                                             break;
                                         }
                                         //cheack if the room is available for this time period
-                                        System.out.println("\n----------------- ROOMS AVAILABLE BETWEEN THIS " +
-                                                "TIME-----------------\n");
 
 
 
 
+                                        //check if the room is available accourding to checkin and checkout date
                                         boolean occupide=hotelplaza.OccupiedRoom(checkIn, checkOut,numberOfRooms);
                                         if(occupide==true){
                                             System.out.println("\n********* ROOMS NOT AVAILABLE. TRY AGAIN! *********\n");
                                             break;
                                         }
+                                        System.out.println("\n----------------- ROOM AVAILABLE BETWEEN THIS " +
+                                                "TIME-----------------\n");
 
                                         hotelplaza.checkRoomsBed(numberOfRooms);
                                         //should mach with the room type
@@ -245,60 +246,99 @@ public class UserInterface implements Serializable {
                                     catch (Exception e) {
                                         System.out.println("\n----------------- ERROR -----------------");
                                         System.out.println("\n----------------- PLEASE TRY AGAIN -----------------");
-                                        System.exit(0);
+                                        break;
                                     }
 
                                 case "2":  // UPDATE A BOOKING
                                     System.out.println("\n----------------- UPDATE A BOOKING -----------------");
+                                    System.out.println("\n----------------- ENTER YOUR PHONENUMBER -----------------");
+                                    int guestPhonenumber2 = Integer.parseInt(scan());
+                                    if(guestPhonenumber2 < 0){
+                                        System.out.println("\n***************** INVALID INPUT. TRY AGAIN!" +
+                                                " *****************\n");
+                                        break;
+                                    }
+
+                                    Guest PhoneGuest=hotelplaza.findGuestByPhoneNumber(guestPhonenumber2);
+                                    System.out.println(PhoneGuest);
+
                                     System.out.println("\n----------------- ENTER ROOM NUMBER-----------------");
                                     //type room number
+
                                     int roomNumber = Integer.parseInt(scan());
-                                    //CHENGE _BOOKING:
+                                    if (!(roomNumber == 11)&&!(roomNumber==12)&&!(roomNumber==13)&&
+                                            !(roomNumber==21)&&!(roomNumber==22)&&!(roomNumber==23)) {
+                                        System.out.println("\n********* INVALID ROOM NUMBER. " +
+                                                "TRY AGAIN! *********\n");
+                                        break;
+                                    }
+                                    //CHENGE _BOOKING
                                     System.out.println("\n----------------- CHANGE BOOKING -----------------");
                                     //PRINT INFORMATION ABOUT BOOKING FOUND PERSON
                                     //change booking list and extend booking checkout date
                                     //check in is same as before information about guest
-                                    System.out.println("\n----------------- ENTER NEW CHECK-OUT DATE (dd/MM/yyyy): -----------------");
-                                    TimeZone zoneUpdate = TimeZone.getTimeZone("UTC");
-                                    Calendar calUpdate =  Calendar.getInstance(zoneUpdate);
-                                    LocalDate newCheckoutDate = LocalDate.parse(scan(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                    calUpdate.clear(Calendar.YEAR);
-                                    //does not allow the user to make a booking before the check in date
-                                    if (newCheckoutDate.isBefore(LocalDate.now())) {
-                                        System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
-                                        break;
+                                    System.out.println("\n----------------- ENTER NEW CHECK-OUT DATE (dd-MM-yyyy): -----------------");
+                                    try{
+                                        TimeZone zoneUpdate = TimeZone.getTimeZone("UTC");
+                                        Calendar calUpdate =  Calendar.getInstance(zoneUpdate);
+                                        LocalDate newCheckoutDate = LocalDate.parse(scan(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                                        calUpdate.clear(Calendar.YEAR);
+                                        //does not allow the user to make a booking before the check in date
+                                        if (newCheckoutDate.isBefore(LocalDate.now())) {
+                                            System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
+                                            break;
+                                        }
+                                        //check if the room is available accourding to checkin and checkout date
+                                        boolean occupideUpdate=hotelplaza.UpdateOccupiedRoom( newCheckoutDate,roomNumber);
+                                        if(occupideUpdate==true){
+                                            System.out.println("\n********* ROOMS NOT AVAILABLE. TRY AGAIN! *********\n");
+                                            break;
+                                        }
+                                        System.out.println("\n----------------- ROOM AVAILABLE BETWEEN THIS " +
+                                                "TIME-----------------\n");
+                                        //calculate the number of nights in check-in and check-out
+                                        int numberOfNights1 = (int) ChronoUnit.DAYS.between(LocalDate.now(), newCheckoutDate);
+
+                                        System.out.println("NUMBER OF NIGHTS: " + numberOfNights1);
+                                        System.out.print("DO YOU NEED INTERNET? (Y/N): ");
+                                        String internetUpdate = scan();
+                                        //invalid input
+                                        if(!internetUpdate.equalsIgnoreCase("Y") &&
+                                                !internetUpdate.equalsIgnoreCase("N")){
+                                            System.out.println("\n***************** INVALID INPUT. TRY AGAIN! *****************\n");
+                                            break;
+                                        }
+                                        hotelplaza.changeBooking(roomNumber, newCheckoutDate);
+                                        //print new Bill again
+                                        System.out.println("\n----------------- PRINTING BILL -----------------");
+                                        double priceUpdate = hotelplaza.totalPriceBooking(numberOfNights1,roomNumber,internetUpdate);
+                                        System.out.println("\n----------------- TOTAL PRICE: "+(priceUpdate)+"DKK -----------------");
+                                        hotelplaza.printBillUpdate(numberOfNights1,roomNumber,internetUpdate,newCheckoutDate,guestPhonenumber2);
+
+                                        //price update minus the old price
+                                        System.out.println("\n----------------- BILL PRINTED SUCCESSFULLY -----------------");
+                                        //print information about booking
+                                        System.out.println("\n----------------- BOOKING UPDATED SUCCESSFULLY -----------------");
+                                        System.out.println("\n----------------- REFOUND LAST BOOKING PAYMENT-----------------");
                                     }
-                                    //calculate the number of nights in check-in and check-out
-                                    int numberOfNights1 = (int) ChronoUnit.DAYS.between(LocalDate.now(), newCheckoutDate);
-                                    System.out.println("NUMBER OF NIGHTS: " + numberOfNights1);
-                                    System.out.print("DO YOU NEED INTERNET? (Y/N): ");
-                                    String internetUpdate = scan();
-                                    //invalid input
-                                    if(!internetUpdate.equalsIgnoreCase("Y") && !internetUpdate.equalsIgnoreCase("N")){
+                                    catch(Exception e){
                                         System.out.println("\n***************** INVALID INPUT. TRY AGAIN! *****************\n");
+
                                         break;
                                     }
-                                    hotelplaza.changeBooking(roomNumber, newCheckoutDate);
-                                    //print new Bill again
-                                    System.out.println("\n----------------- PRINTING BILL -----------------");
-                                    double priceUpdate = hotelplaza.totalPriceBooking(numberOfNights1,roomNumber,internetUpdate);
-                                    System.out.println("\n----------------- TOTAL PRICE: "+(priceUpdate)+"DKK -----------------");
-                                    //price update minus the old price
-                                    System.out.println("\n----------------- BILL PRINTED SUCCESSFULLY -----------------");
-                                    //print information about booking
-                                    System.out.println("\n----------------- BOOKING UPDATED SUCCESSFULLY -----------------");
                                     //Main.serialize( hotelplaza,"Database.ser");
                                     break;
+
                                 case "3":   // CHANGE GUEST INFO * working
                                     System.out.println("\n----------------- CHANGE GUEST INFO -----------------");
                                     System.out.println("ENTER GUEST'S PHONENUMBER: ");
-                                    int guestPhonenumber2 = Integer.parseInt(scan());
+                                    int guestPhonenumber = Integer.parseInt(scan());
                                     System.out.println("ENTER NEW GUEST'S FULL NAME: ");
                                     String guestFullname2 = scan();
                                     System.out.println("ENTER NEW GUEST'S ADDRESS: ");
                                     String guestAddress2 = scan();
                                     //print updated guest info
-                                    hotelplaza.changeGuestInfo(guestPhonenumber2, guestFullname2, guestAddress2);
+                                    hotelplaza.changeGuestInfo(guestPhonenumber, guestFullname2, guestAddress2);
                                     //print guest info
                                     System.out.println("\n----------------- GUEST INFO UPDATED SUCCESSFULLY -----------------");
                                     //Main.serialize( hotelplaza,"Database.ser");

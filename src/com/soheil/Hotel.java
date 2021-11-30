@@ -271,7 +271,7 @@ public class Hotel implements Serializable {
     return null;
   }
 
-  // find Guest by phone number
+  // find Guest by phone number (case2)
   public Guest findGuestByPhoneNumber(int guestPhoneNumber) {
     for (int i = 0; i < listOfRegisteredGuests.size(); i++) {
       if (listOfRegisteredGuests.get(i).getPhoneNumber() == guestPhoneNumber) {
@@ -315,8 +315,17 @@ public class Hotel implements Serializable {
     System.out.println("Guest phonenumber: " + guestPhonenumber);
     System.out.println("Total price: " + (price));
   }
-  //isocupide according to check in and check out
+  //print bill for update booking
+  public void printBillUpdate(int numberOfNights1, int numberOfRooms1, String internet1, LocalDate checkOut1,
+                              int guestPhonenumber1) {
 
+    System.out.println("Number of nights: " + numberOfNights1);
+    System.out.println("Number of rooms: " + numberOfRooms1);
+    System.out.println("Internet: " + internet1+"price per night: " + "100,00 DKK");
+    System.out.println("Check out: " + checkOut1);
+    System.out.println("Guest phonenumber: " + guestPhonenumber1);
+
+  }
 
 
 
@@ -330,9 +339,21 @@ public class Hotel implements Serializable {
           return true;
 
         }
-        else{System.out.println("Room is available");}
       }
+    }
+    return false;
+  }
+  //update checkout date
 
+  public boolean UpdateOccupiedRoom( LocalDate checkOut, int roomNumber) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
+        if (listOfBookings.get(i).getEndDate().isAfter(checkOut)) {
+          System.out.println("Room is occupied "+" Chenge your check out  "+checkOut);
+          return true;
+
+        }
+      }
     }
     return false;
   }
