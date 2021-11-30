@@ -91,13 +91,14 @@ public class Hotel implements Serializable {
 
   // Create a booking
   public Booking makeBooking(
-          String roomType,
-          int roomNumber,
-          int numberOfNights,
-          LocalDate startDate,
-          LocalDate endDate,
-          Guest guest) {
-    Booking newBooking = new Booking(roomType, roomNumber, numberOfNights, startDate, endDate, guest);
+      String roomType,
+      int roomNumber,
+      int numberOfNights,
+      LocalDate startDate,
+      LocalDate endDate,
+      Guest guest) {
+    Booking newBooking =
+        new Booking(roomType, roomNumber, numberOfNights, startDate, endDate, guest);
     listOfBookings.add(newBooking);
     return newBooking;
   }
@@ -131,7 +132,6 @@ public class Hotel implements Serializable {
   // the update booking here
   public void updateBooking() {}
 
-
   // CHANGE GUEST INFORMATION and show the updated information
   public void changeGuestInfo(int phoneNumber, String fullName, String address) {
     for (int i = 0; i < listOfRegisteredGuests.size(); i++) {
@@ -159,36 +159,46 @@ public class Hotel implements Serializable {
     return null;
   }
   // REGISTER NEW STAFFAccount
-  public Staff registerNewAccountant(String title, String firstname, String Lastname, int phoneNumnber, double salery) {
-    StaffAccountant newStaffA = new StaffAccountant(title, firstname, Lastname, phoneNumnber, salery);
+  public Staff registerNewAccountant(
+      String title, String firstname, String Lastname, int phoneNumnber, double salery) {
+    StaffAccountant newStaffA =
+        new StaffAccountant(title, firstname, Lastname, phoneNumnber, salery);
     listOfStaff.add(newStaffA);
     return newStaffA;
   }
   // register NEW STAFFAccount
   public Staff registerCleaningLady(
-          String title, String firstname, String Lastname, int phoneNumnber, double salery) {
-    StaffCleaningLady newStaffC = new StaffCleaningLady(title, firstname, Lastname, phoneNumnber, salery);
+      String title, String firstname, String Lastname, int phoneNumnber, double salery) {
+    StaffCleaningLady newStaffC =
+        new StaffCleaningLady(title, firstname, Lastname, phoneNumnber, salery);
     listOfStaff.add(newStaffC);
     return newStaffC;
   }
   // register NEW STAFFAccount
   public StaffUser registerNewDirector(
-          String title,
-          String firstname,
-          String Lastname,
-          int phoneNumnber,
-          double salery,
-          String password,
-          String username) {
-    StaffDirector newStaffM = new StaffDirector(title, firstname, Lastname, phoneNumnber, salery, password, username);
+      String title,
+      String firstname,
+      String Lastname,
+      int phoneNumnber,
+      double salery,
+      String password,
+      String username) {
+    StaffDirector newStaffM =
+        new StaffDirector(title, firstname, Lastname, phoneNumnber, salery, password, username);
     listOfStaff.add(newStaffM);
     return newStaffM;
   }
   // register NEW STAFFAccount
-  public StaffUser registerNewReception(String title, String firstname, String Lastname, int phoneNumnber, double salery,
-                                        String password, String username) {
-    StaffReceptionist newStaffD = new StaffReceptionist(title, firstname, Lastname, phoneNumnber, salery, password,
-            username);
+  public StaffUser registerNewReception(
+      String title,
+      String firstname,
+      String Lastname,
+      int phoneNumnber,
+      double salery,
+      String password,
+      String username) {
+    StaffReceptionist newStaffD =
+        new StaffReceptionist(title, firstname, Lastname, phoneNumnber, salery, password, username);
     listOfStaff.add(newStaffD);
     return newStaffD;
   }
@@ -205,23 +215,26 @@ public class Hotel implements Serializable {
 
   public Hotel updateListOfRooms(int roomNumber, LocalDate checkInDate, LocalDate checkOutDate) {
     for (int i = 0; i < listOfRooms.size(); i++) {
-      //setisOccupide to false after check out
+      // setisOccupide to false after check out
 
-      if (listOfRooms.get(i).getRoomNumber() == roomNumber && listOfRooms.get(i).getIsOccupied() == false) {
+      if (listOfRooms.get(i).getRoomNumber() == roomNumber
+          && listOfRooms.get(i).getIsOccupied() == false) {
         listOfRooms.get(i).setIsOccupied(true);
-        System.out.println("R00M NUMBER" + roomNumber + " HAS BEEN BOOKED"+"\n"+"CHECK IN DATE: "+checkInDate+"\n"+"CHECK OUT DATE: "+checkOutDate);
+        System.out.println(
+            "R00M NUMBER"
+                + roomNumber
+                + " HAS BEEN BOOKED"
+                + "\n"
+                + "CHECK IN DATE: "
+                + checkInDate
+                + "\n"
+                + "CHECK OUT DATE: "
+                + checkOutDate);
       }
     }
     return null;
   }
-  //show calender of booking
-
-
-
-
-
-
-
+  // show calender of booking
 
   // show list of room getisOccupied false
 
@@ -229,21 +242,19 @@ public class Hotel implements Serializable {
     for (int i = 0; i < listOfRooms.size(); i++) {
 
       System.out.println(
-            listOfRooms.get(i).getRoomType()
-                + " |ROOM NUMBER "
-                + listOfRooms.get(i).getRoomNumber()
-                + " |PRICE "
-                + listOfRooms.get(i).getPricePerNight());
-      }
+          listOfRooms.get(i).getRoomType()
+              + " |ROOM NUMBER "
+              + listOfRooms.get(i).getRoomNumber()
+              + " |PRICE "
+              + listOfRooms.get(i).getPricePerNight());
     }
-
+  }
 
   public void showListOfRooms2() {
     for (int i = 0; i < listOfRooms.size(); i++) {
 
-        // false means the room is available
-        System.out.println(listOfRooms.get(i).toString());
-
+      // false means the room is available
+      System.out.println(listOfRooms.get(i).toString());
     }
   }
   // translate false/true to yes or no
@@ -286,7 +297,6 @@ public class Hotel implements Serializable {
       if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
         listOfBookings.get(i).setEndDate(newCheckoutDate);
         System.out.println("Booking has been changed");
-
       }
     }
     return null;
@@ -307,7 +317,7 @@ public class Hotel implements Serializable {
 
     System.out.println("Number of nights: " + numberOfNights);
     System.out.println("Number of rooms: " + numberOfRooms);
-    System.out.println("Internet: " + internet+"price per night: " + "100,00 DKK");
+    System.out.println("Internet: " + internet + "price per night: " + "100,00 DKK");
     System.out.println("Check in: " + checkIn);
     System.out.println("Check out: " + checkOut);
     System.out.println("Guest fullname: " + guestFullname);
@@ -315,64 +325,58 @@ public class Hotel implements Serializable {
     System.out.println("Guest phonenumber: " + guestPhonenumber);
     System.out.println("Total price: " + (price));
   }
-  //print bill for update booking
-  public void printBillUpdate(int numberOfNights1, int numberOfRooms1, String internet1, LocalDate checkOut1,
-                              int guestPhonenumber1) {
+  // print bill for update booking
+  public void printBillUpdate(
+      int numberOfNights1,
+      int numberOfRooms1,
+      String internet1,
+      LocalDate checkOut1,
+      int guestPhonenumber1) {
 
     System.out.println("Number of nights: " + numberOfNights1);
     System.out.println("Number of rooms: " + numberOfRooms1);
-    System.out.println("Internet: " + internet1+"price per night: " + "100,00 DKK");
+    System.out.println("Internet: " + internet1 + "price per night: " + "100,00 DKK");
     System.out.println("Check out: " + checkOut1);
     System.out.println("Guest phonenumber: " + guestPhonenumber1);
-
   }
-
-
-
 
   // check if room is available for one room
   public boolean OccupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
       if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
-        if (listOfBookings.get(i).getStartDate().isBefore(checkOut) && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
-          System.out.println("Room is occupied between"+checkIn+" and "+checkOut);
+        if (listOfBookings.get(i).getStartDate().isBefore(checkOut)
+            && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
+          System.out.println("Room is occupied between" + checkIn + " and " + checkOut);
           return true;
-
         }
       }
     }
     return false;
   }
-  //update checkout date
+  // update checkout date
 
-  public boolean UpdateOccupiedRoom( LocalDate checkOut, int roomNumber) {
+  public boolean UpdateOccupiedRoom(LocalDate checkOut, int roomNumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
       if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
         if (listOfBookings.get(i).getEndDate().isAfter(checkOut)) {
-          System.out.println("Room is occupied "+" Chenge your check out  "+checkOut);
+          System.out.println("Room is occupied " + " Chenge your check out  " + checkOut);
           return true;
-
         }
       }
     }
     return false;
   }
+  // update guest information
+  public void UpdateBooking(Guest phoneGuest, int roomNumber, LocalDate newCheckoutDate, int numberOfNights) {
 
-
-
-
-  // check available days in each rooms
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfRegisteredGuests.get(i).getPhoneNumber() == phoneGuest.getPhoneNumber()) {
+        if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
+          listOfBookings.get(i).setEndDate(newCheckoutDate);
+          listOfBookings.get(i).setNumberOfNights(numberOfNights);
+          System.out.println("Booking has been changed");
+        }
+      }
+    }
+  }
+  }

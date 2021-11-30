@@ -251,16 +251,31 @@ public class UserInterface implements Serializable {
 
                                 case "2":  // UPDATE A BOOKING
                                     System.out.println("\n----------------- UPDATE A BOOKING -----------------");
+                                    System.out.println("\n----------------- LIST OF BOOKING IN HOTELPLAZA -----------------");
+                                    hotelplaza.getListOfBookings().forEach(System .out::println);
+
                                     System.out.println("\n----------------- ENTER YOUR PHONENUMBER -----------------");
                                     int guestPhonenumber2 = Integer.parseInt(scan());
+                                    System.out.println(guestPhonenumber2);
+
+
                                     if(guestPhonenumber2 < 0){
                                         System.out.println("\n***************** INVALID INPUT. TRY AGAIN!" +
                                                 " *****************\n");
                                         break;
                                     }
 
+
                                     Guest PhoneGuest=hotelplaza.findGuestByPhoneNumber(guestPhonenumber2);
                                     System.out.println(PhoneGuest);
+                                    //only print Phone number and name of the guest in the list of bookings
+
+
+                                    if(PhoneGuest==null){
+                                        System.out.println("\n***************** GUEST NOT FOUND. TRY AGAIN!" );
+                                        break;
+                                    }
+
 
                                     System.out.println("\n----------------- ENTER ROOM NUMBER-----------------");
                                     //type room number
@@ -300,6 +315,8 @@ public class UserInterface implements Serializable {
                                         int numberOfNights1 = (int) ChronoUnit.DAYS.between(LocalDate.now(), newCheckoutDate);
 
                                         System.out.println("NUMBER OF NIGHTS: " + numberOfNights1);
+                                        hotelplaza.UpdateBooking(PhoneGuest,roomNumber,newCheckoutDate,numberOfNights1);
+
                                         System.out.print("DO YOU NEED INTERNET? (Y/N): ");
                                         String internetUpdate = scan();
                                         //invalid input
