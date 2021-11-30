@@ -91,14 +91,13 @@ public class Hotel implements Serializable {
 
   // Create a booking
   public Booking makeBooking(
-      String roomType,
-      int roomNumber,
-      int numberOfNights,
-      LocalDate startDate,
-      LocalDate endDate,
-      Guest guest) {
-    Booking newBooking =
-        new Booking(roomType, roomNumber, numberOfNights, startDate, endDate, guest);
+          String roomType,
+          int roomNumber,
+          int numberOfNights,
+          LocalDate startDate,
+          LocalDate endDate,
+          Guest guest) {
+    Booking newBooking = new Booking(roomType, roomNumber, numberOfNights, startDate, endDate, guest);
     listOfBookings.add(newBooking);
     return newBooking;
   }
@@ -131,8 +130,9 @@ public class Hotel implements Serializable {
 
   // the update booking here
   public void updateBooking() {}
-  // CHANGE GUEST INFORMATION and show the updated information
 
+
+  // CHANGE GUEST INFORMATION and show the updated information
   public void changeGuestInfo(int phoneNumber, String fullName, String address) {
     for (int i = 0; i < listOfRegisteredGuests.size(); i++) {
       if (listOfRegisteredGuests.get(i).getPhoneNumber() == phoneNumber) {
@@ -140,11 +140,8 @@ public class Hotel implements Serializable {
         listOfRegisteredGuests.get(i).setAddress(address);
         System.out.println(listOfRegisteredGuests.get(i).toString());
       }
-
-      }
-
     }
-
+  }
 
   // CHANGE STAFF INFO
   public Hotel changeStaffInfo(
@@ -162,46 +159,36 @@ public class Hotel implements Serializable {
     return null;
   }
   // REGISTER NEW STAFFAccount
-  public Staff registerNewAccountant(
-      String title, String firstname, String Lastname, int phoneNumnber, double salery) {
-    StaffAccountant newStaffA =
-        new StaffAccountant(title, firstname, Lastname, phoneNumnber, salery);
+  public Staff registerNewAccountant(String title, String firstname, String Lastname, int phoneNumnber, double salery) {
+    StaffAccountant newStaffA = new StaffAccountant(title, firstname, Lastname, phoneNumnber, salery);
     listOfStaff.add(newStaffA);
     return newStaffA;
   }
   // register NEW STAFFAccount
   public Staff registerCleaningLady(
-      String title, String firstname, String Lastname, int phoneNumnber, double salery) {
-    StaffCleaningLady newStaffC =
-        new StaffCleaningLady(title, firstname, Lastname, phoneNumnber, salery);
+          String title, String firstname, String Lastname, int phoneNumnber, double salery) {
+    StaffCleaningLady newStaffC = new StaffCleaningLady(title, firstname, Lastname, phoneNumnber, salery);
     listOfStaff.add(newStaffC);
     return newStaffC;
   }
   // register NEW STAFFAccount
   public StaffUser registerNewDirector(
-      String title,
-      String firstname,
-      String Lastname,
-      int phoneNumnber,
-      double salery,
-      String password,
-      String username) {
-    StaffDirector newStaffM =
-        new StaffDirector(title, firstname, Lastname, phoneNumnber, salery, password, username);
+          String title,
+          String firstname,
+          String Lastname,
+          int phoneNumnber,
+          double salery,
+          String password,
+          String username) {
+    StaffDirector newStaffM = new StaffDirector(title, firstname, Lastname, phoneNumnber, salery, password, username);
     listOfStaff.add(newStaffM);
     return newStaffM;
   }
   // register NEW STAFFAccount
-  public StaffUser registerNewReception(
-      String title,
-      String firstname,
-      String Lastname,
-      int phoneNumnber,
-      double salery,
-      String password,
-      String username) {
-    StaffReceptionist newStaffD =
-        new StaffReceptionist(title, firstname, Lastname, phoneNumnber, salery, password, username);
+  public StaffUser registerNewReception(String title, String firstname, String Lastname, int phoneNumnber, double salery,
+                                        String password, String username) {
+    StaffReceptionist newStaffD = new StaffReceptionist(title, firstname, Lastname, phoneNumnber, salery, password,
+            username);
     listOfStaff.add(newStaffD);
     return newStaffD;
   }
@@ -215,11 +202,6 @@ public class Hotel implements Serializable {
     }
     return null;
   }
-
-
-
-
-
 
   public Hotel updateListOfRooms(int roomNumber, LocalDate checkInDate, LocalDate checkOutDate) {
     for (int i = 0; i < listOfRooms.size(); i++) {
@@ -245,24 +227,23 @@ public class Hotel implements Serializable {
 
   public void showListOfRooms() {
     for (int i = 0; i < listOfRooms.size(); i++) {
-      if (listOfRooms.get(i).getIsOccupied() == false) {
-        // false means the room is available
-        System.out.println(
+
+      System.out.println(
             listOfRooms.get(i).getRoomType()
                 + " |ROOM NUMBER "
                 + listOfRooms.get(i).getRoomNumber()
-                + " |IS OCCUPIED "
-                + translate2(listOfRooms.get(i).getIsOccupied()));
+                + " |PRICE "
+                + listOfRooms.get(i).getPricePerNight());
       }
     }
-  }
+
 
   public void showListOfRooms2() {
     for (int i = 0; i < listOfRooms.size(); i++) {
-      if (listOfRooms.get(i).getIsOccupied() == false) {
+
         // false means the room is available
         System.out.println(listOfRooms.get(i).toString());
-      }
+
     }
   }
   // translate false/true to yes or no
@@ -337,16 +318,21 @@ public class Hotel implements Serializable {
   //isocupide according to check in and check out
 
 
-  // check if room is available
 
 
-  // check if room is available
-  public boolean OccupiedRoom(LocalDate checkIn, LocalDate checkOut) {
+
+  // check if room is available for one room
+  public boolean OccupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getStartDate().isAfter(checkIn)
-          && listOfBookings.get(i).getEndDate().isBefore(checkOut)) {
-        return true;
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
+        if (listOfBookings.get(i).getStartDate().isBefore(checkOut) && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
+          System.out.println("Room is occupied between"+checkIn+" and "+checkOut);
+          return true;
+
+        }
+        else{System.out.println("Room is available");}
       }
+
     }
     return false;
   }
@@ -360,17 +346,10 @@ public class Hotel implements Serializable {
 
 
 
-  public Hotel checkAvailableDays(LocalDate checkIn, LocalDate checkOut) {
-    for (int i = 0; i < listOfBookings.size(); i++) {
-      if (OccupiedRoom(checkIn, checkOut)== false) {
-        System.out.println(
-            "Room number "
-                + listOfBookings.get(i).getRoomNumber()
-                                 + " is available for the period ");
-      }
-    }
-    return null;
-  }
+
+
+
+
 
 
 
