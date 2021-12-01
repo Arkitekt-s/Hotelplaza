@@ -1,19 +1,12 @@
 package com.soheil;
 
 import Room.*;
-import Room.RoomDoubleBed;
-import Room.RoomSuite;
-import Room.RoomOneBed;
 import Staff.*;
 
 
-
-import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.io.Serializable;
-import java.util.Date;
 
 public class Hotel implements Serializable {
   // To avoid error when deserializing after changes made in class that implements Serializable
@@ -292,15 +285,7 @@ public class Hotel implements Serializable {
     return null;
   }
 
-  public Hotel changeBooking(int roomNumber, LocalDate newCheckoutDate) {
-    for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
-        listOfBookings.get(i).setEndDate(newCheckoutDate);
-        System.out.println("Booking has been changed");
-      }
-    }
-    return null;
-  }
+
 
   public void printBill(
       double price,
@@ -317,7 +302,7 @@ public class Hotel implements Serializable {
 
     System.out.println("Number of nights: " + numberOfNights);
     System.out.println("Number of rooms: " + numberOfRooms);
-    System.out.println("Internet: " + internet + "price per night: " + "100,00 DKK");
+    System.out.println("Internet: " + internet + " price per night: " + "100,00 DKK");
     System.out.println("Check in: " + checkIn);
     System.out.println("Check out: " + checkOut);
     System.out.println("Guest fullname: " + guestFullname);
@@ -335,13 +320,13 @@ public class Hotel implements Serializable {
 
     System.out.println("Number of nights: " + numberOfNights1);
     System.out.println("Number of rooms: " + numberOfRooms1);
-    System.out.println("Internet: " + internet1 + "price per night: " + "100,00 DKK");
+    System.out.println("Internet: " + internet1 + " price per night: " + "100,00 DKK");
     System.out.println("Check out: " + checkOut1);
     System.out.println("Guest phonenumber: " + guestPhonenumber1);
   }
 
   // check if room is available for one room
-  public boolean OccupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber) {
+  public boolean occupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
       if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
         if (listOfBookings.get(i).getStartDate().isBefore(checkOut)
@@ -354,29 +339,91 @@ public class Hotel implements Serializable {
     return false;
   }
   // update checkout date
-
-  public boolean UpdateOccupiedRoom(LocalDate checkOut, int roomNumber) {
+  public boolean updatOoccupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber,int phonenumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
-        if (listOfBookings.get(i).getEndDate().isAfter(checkOut)) {
-          System.out.println("Room is occupied " + " Chenge your check out  " + checkOut);
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber&&
+              listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()==phonenumber) {
+        if (listOfBookings.get(i).getStartDate().isBefore(checkOut)
+                && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
+          System.out.println("Room is occupied between" + checkIn + " and " + checkOut);
           return true;
         }
       }
     }
     return false;
   }
-  // update guest information
-  public void UpdateBooking(Guest phoneGuest, int roomNumber, LocalDate newCheckoutDate, int numberOfNights) {
 
+  // find checkin date
+
+  public LocalDate findCheckIn(int roomNumber, int guestPhonenumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfRegisteredGuests.get(i).getPhoneNumber() == phoneGuest.getPhoneNumber()) {
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber
+          && listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber) {
+
+        return listOfBookings.get(i).getStartDate();
+      }
+    }
+    return null;
+  }
+  // find check out date
+  public LocalDate findCheckout(int roomNumber, int guestPhonenumber) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber
+          && listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber) {
+
+        return listOfBookings.get(i).getEndDate();
+      }
+    }
+    return null;
+  }
+  // find old number of nights
+  public int findOldNumberOfNights(int roomNumber, int guestPhonenumber) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber
+          && listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber) {
+
+        return listOfBookings.get(i).getNumberOfNights();
+      }
+    }
+    return 0;
+  }
+
+  // update guest information in booking in case2
+  public void updateBooking(
+      Guest phoneGuest, int roomNumber, int numberOfNights) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()== phoneGuest.getPhoneNumber()) {
         if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
-          listOfBookings.get(i).setEndDate(newCheckoutDate);
           listOfBookings.get(i).setNumberOfNights(numberOfNights);
-          System.out.println("Booking has been changed");
         }
       }
     }
   }
+  public void updateCheckout(
+          Guest phoneGuest, int roomNumber, LocalDate newCheckoutDate) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()== phoneGuest.getPhoneNumber()&&
+              (listOfBookings.get(i).getRoomNumber() == roomNumber)) {
+          listOfBookings.get(i).setEndDate(newCheckoutDate);
+        }
+      }
+    }
+//check if the user is available
+  public boolean checkPhoneNumberInList(int guestPhonenumber) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber) {
+        return true;
+      }
+    }
+    return false;
   }
+
+  public int findRoomNumberByPhoneNumber(int guestPhonenumber2) {
+    for (int i = 0; i < listOfBookings.size(); i++) {
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber2) {
+        return listOfBookings.get(i).getRoomNumber();
+      }
+    }
+    return 0;
+  }
+}
