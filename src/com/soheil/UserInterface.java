@@ -47,6 +47,8 @@ public class UserInterface implements Serializable {
         System.out.print("ENTER HERE: ");
     }
 
+
+
     public void userInterface(Hotel hotelplaza, Staff loggedInEmployee) {
 
 
@@ -193,7 +195,7 @@ public class UserInterface implements Serializable {
                                         //check list of booking and if its same as the guest phonenumber not allow to book
                                         boolean checkBooking=hotelplaza.checkPhoneNumberInList(guestPhonenumber);
                                         if(checkBooking==true){
-                                            System.out.println("\n***************** GUEST ALREADY BOOKED. TRY AGAIN!" +
+                                            System.out.println("\n***************** GUEST ALREADY EXIST . TRY AGAIN!" +
                                                     " *****************\n");
                                             break;
                                         }
@@ -310,12 +312,17 @@ public class UserInterface implements Serializable {
                                         //check if the room is available accourding to checkin and checkout date
                                         boolean occupideUpdate=hotelplaza.updatOoccupiedRoom
                                                 ( checkInFind,newCheckoutDate,roomNumber,guestPhonenumber2);
-                                            if(!occupideUpdate){
+                                            if(occupideUpdate){
                                                 System.out.println("\n********* ROOM NOT AVAILABLE. TRY AGAIN! *********\n");
+                                                break;
+                                            }
+                                            else if(!occupideUpdate){
+                                                System.out.println("\n********* ROOM AVAILABLE. CHANGE BOOKING *********\n");
                                             }
 
                                         else{System.out.println("\n----------------- ROOM AVAILABLE BETWEEN THIS " +
-                                                "TIME-----------------\n");}
+                                                "TIME-----------------\n");
+                                            }
 
 
 
@@ -351,6 +358,7 @@ public class UserInterface implements Serializable {
                                             hotelplaza.printBillUpdate
                                                     (totalNumberOfNights,roomNumber,
                                                             internetUpdate,newCheckoutDate,guestPhonenumber2);
+
                                         }
                                         catch (Exception e){
                                             System.out.println("\n********* INVALID DATE. TRY AGAIN! *********\n");
@@ -361,6 +369,7 @@ public class UserInterface implements Serializable {
                                         //print information about booking
                                         System.out.println("\n----------------- BOOKING UPDATED SUCCESSFULLY" +
                                                 " -----------------");
+
                                     }
                                     catch(Exception e){
                                         System.out.println("\n***************** INVALID INPUT. TRY AGAIN! *****************\n");
@@ -373,6 +382,13 @@ public class UserInterface implements Serializable {
                                     System.out.println("\n----------------- CHANGE GUEST INFO -----------------");
                                     System.out.println("ENTER GUEST'S PHONENUMBER: ");
                                     int guestPhonenumber = Integer.parseInt(scan());
+                                    Guest PhoneGuest=hotelplaza.findGuestByPhoneNumber(guestPhonenumber);
+                                    System.out.println(PhoneGuest);
+                                    if(PhoneGuest==null){
+                                        System.out.println("\n***************** GUEST NOT FOUND. TRY AGAIN!" );
+                                        break;
+                                    }
+
                                     System.out.println("ENTER NEW GUEST'S FULL NAME: ");
                                     String guestFullname2 = scan();
                                     System.out.println("ENTER NEW GUEST'S ADDRESS: ");
@@ -403,8 +419,20 @@ public class UserInterface implements Serializable {
 
                                 case "5":    // CHANGE STAFF INFO
                                     System.out.println("\n----------------- CHANGE STAFF INFO -----------------");
+                                    //print all staff info
+                                    System.out.println("\n----------------- STAFF INFO -----------------");
+
+                                    ArrayList<Staff>Staff=hotelplaza.getListOfStaff();
+                                    System.out.println(Staff);
+
                                     System.out.println("ENTER STAFF'S PHONENUMBER: ");
                                     int staffPhonenumber = Integer.parseInt(scan());
+
+                                    //find staff by phone number
+                                    String Stafftitle=hotelplaza.findStaffByPhoneNumber(staffPhonenumber);
+                                    System.out.println(Stafftitle);
+
+
                                     System.out.println("ENTER NEW STAFF'S FIRST NAME: ");
                                     String staffFirstname = scan();
                                     System.out.println("ENTER NEW STAFF'S LAST NAME: ");

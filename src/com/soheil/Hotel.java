@@ -285,8 +285,6 @@ public class Hotel implements Serializable {
     return null;
   }
 
-
-
   public void printBill(
       double price,
       int numberOfNights,
@@ -339,12 +337,11 @@ public class Hotel implements Serializable {
     return false;
   }
   // update checkout date
-  public boolean updatOoccupiedRoom(LocalDate checkIn, LocalDate checkOut, int roomNumber,int phonenumber) {
+  public boolean updatOoccupiedRoom(
+      LocalDate checkIn, LocalDate checkOut, int roomNumber, int phonenumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getRoomNumber() == roomNumber&&
-              listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()==phonenumber) {
-        if (listOfBookings.get(i).getStartDate().isBefore(checkOut)
-                && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
+      if (listOfBookings.get(i).getRoomNumber() == roomNumber && listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() != phonenumber) {
+        if (listOfBookings.get(i).getStartDate().isBefore(checkOut) && listOfBookings.get(i).getEndDate().isAfter(checkIn)) {
           System.out.println("Room is occupied between" + checkIn + " and " + checkOut);
           return true;
         }
@@ -389,26 +386,26 @@ public class Hotel implements Serializable {
   }
 
   // update guest information in booking in case2
-  public void updateBooking(
-      Guest phoneGuest, int roomNumber, int numberOfNights) {
+  public void updateBooking(Guest phoneGuest, int roomNumber, int numberOfNights) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()== phoneGuest.getPhoneNumber()) {
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()
+          == phoneGuest.getPhoneNumber()) {
         if (listOfBookings.get(i).getRoomNumber() == roomNumber) {
           listOfBookings.get(i).setNumberOfNights(numberOfNights);
         }
       }
     }
   }
-  public void updateCheckout(
-          Guest phoneGuest, int roomNumber, LocalDate newCheckoutDate) {
+
+  public void updateCheckout(Guest phoneGuest, int roomNumber, LocalDate newCheckoutDate) {
     for (int i = 0; i < listOfBookings.size(); i++) {
-      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber()== phoneGuest.getPhoneNumber()&&
-              (listOfBookings.get(i).getRoomNumber() == roomNumber)) {
-          listOfBookings.get(i).setEndDate(newCheckoutDate);
-        }
+      if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == phoneGuest.getPhoneNumber()
+          && (listOfBookings.get(i).getRoomNumber() == roomNumber)) {
+        listOfBookings.get(i).setEndDate(newCheckoutDate);
       }
     }
-//check if the user is available
+  }
+  // check if the user is available
   public boolean checkPhoneNumberInList(int guestPhonenumber) {
     for (int i = 0; i < listOfBookings.size(); i++) {
       if (listOfBookings.get(i).getRegisteredGuest().getPhoneNumber() == guestPhonenumber) {
@@ -426,4 +423,15 @@ public class Hotel implements Serializable {
     }
     return 0;
   }
+
+  public String findStaffByPhoneNumber(int staffPhonenumber) {
+    for (int i = 0; i < listOfStaff.size(); i++) {
+      if (listOfStaff.get(i).getPhoneNumber() == staffPhonenumber) {
+
+        return listOfStaff.get(i).getTitle();
+      }
+    }
+    return null;
+  }
 }
+
